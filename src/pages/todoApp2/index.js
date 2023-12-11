@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { ExportToExcel } from "../../../components/ExportToExcel";
 import axios from "axios";
+import ImportFromExcel from "../../../components/ImportFromExcel";
 
 export default function TodoApp2() {
   const {
@@ -33,7 +34,7 @@ export default function TodoApp2() {
     const listTodo = JSON.parse(localStorage.getItem("todoApp"));
     localStorage.setItem(
       "todoApp",
-      JSON.stringify([...listTodo, { data, date: new Date() }])
+      JSON.stringify([...listTodo, { data: data.todoApp, date: new Date() }])
     );
     setTodoApp(listTodo);
   };
@@ -66,12 +67,12 @@ export default function TodoApp2() {
     const data = localStorage.getItem("todoApp");
     const customHeadings = JSON.parse(data).map((item, index) => ({
       Id: index + 1,
-      Data: item.data.todoApp,
-      Date: dayjs(item?.date).format("DD/MM/YYYY"),
+      data: item.data,
+      date: dayjs(item?.date).format("DD/MM/YYYY"),
     }));
     console.log("🚀 ========= customHeadings1234:", customHeadings);
     setData2(customHeadings);
-  }, []);
+  }, [todoApp]);
   return (
     <div className="bg-white pt-12 pr-0 pb-12 pl-0 mt-0 mr-auto mb-0 ml-auto sm:py-16 lg:py-20 max-w-4xl">
       <div className="px-4 py-2">
@@ -104,16 +105,17 @@ export default function TodoApp2() {
           <FontAwesomeIcon icon={faDownload} />
           Export excel
         </button> */}
-        <ExportToExcel
+        {/* <ExportToExcel
           apiData={data}
           fileName={fileName}
           className={"bg-green-500 p-2 rounded-xl"}
-        />
+        /> */}
         <ExportToExcel
           apiData={data2}
           fileName={fileName2}
           className={"bg-green-500 p-2 rounded-xl"}
         />
+        <ImportFromExcel />
       </div>
       <ul className="divide-y divide-gray-200 px-4">
         {listTodoApp?.map((item, index) => (
@@ -126,9 +128,7 @@ export default function TodoApp2() {
                 className="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded"
               />
               <label htmlFor="todo1" className="ml-3 block text-gray-900">
-                <span className="text-lg font-medium mr-2">
-                  {item?.data?.todoApp}
-                </span>
+                <span className="text-lg font-medium mr-2">{item?.data}</span>
                 <span className="text-sm font-light text-gray-500">
                   Due on {dayjs(item?.date).format("DD/MM/YYYY")}
                 </span>
