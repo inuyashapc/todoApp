@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import dayjs from "dayjs";
 import { useForm } from "react-hook-form";
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { ExportToExcel } from "../../../components/ExportToExcel";
 import axios from "axios";
 import ImportFromExcel from "../../../components/ImportFromExcel";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
+import ModelHeadlessUI from "../../../components/ModelHeadlessUI";
 
 export default function TodoApp2() {
   const {
@@ -26,7 +27,6 @@ export default function TodoApp2() {
 
   useEffect(() => {
     const data = localStorage.getItem("todoApp");
-    console.log("🚀 ========= data:", data);
     setListTodoApp(JSON.parse(localStorage.getItem("todoApp")));
   }, [todoApp]);
 
@@ -34,7 +34,14 @@ export default function TodoApp2() {
     const listTodo = JSON.parse(localStorage.getItem("todoApp"));
     localStorage.setItem(
       "todoApp",
-      JSON.stringify([...listTodo, { data: data.todoApp, date: new Date() }])
+      JSON.stringify([
+        ...listTodo,
+        {
+          Id: listTodo[listTodo.length - 1].Id + 1,
+          data: data.todoApp,
+          date: new Date(),
+        },
+      ])
     );
     setTodoApp(listTodo);
   };
@@ -53,8 +60,6 @@ export default function TodoApp2() {
             "Article Id": item.id,
             "Article Title": item.title,
           }));
-          console.log("🚀 ========= customHeadings:", customHeadings);
-
           setData(customHeadings);
         });
     };
@@ -70,11 +75,22 @@ export default function TodoApp2() {
       data: item.data,
       date: dayjs(item?.date).format("DD/MM/YYYY"),
     }));
-    console.log("🚀 ========= customHeadings1234:", customHeadings);
     setData2(customHeadings);
   }, [todoApp]);
+
+  const handleDeleteTodoApp = (id) => {
+    console.log("🚀 ========= id:", id);
+    const data = localStorage.getItem("todoApp");
+    console.log("🚀 ========= data:", data);
+    const dataNew = JSON.parse(data).filter((item) => item.Id !== id);
+    console.log("🚀 ========= dataNew:", dataNew);
+    localStorage.setItem("todoApp", JSON.stringify(dataNew));
+    setTodoApp(dataNew);
+  };
+
+  const handleEditTodoApp = () => {};
   return (
-    <div className="bg-white pt-12 pr-0 pb-12 pl-0 mt-0 mr-auto mb-0 ml-auto sm:py-16 lg:py-20 max-w-4xl">
+    <div className="pt-12 pr-0 pb-12 pl-0 mt-0 mr-auto mb-0 ml-auto sm:py-16 lg:py-20 max-w-4xl">
       <div className="px-4 py-2">
         <h1 className="text-gray-800 font-bold text-2xl uppercase">
           To-Do List
@@ -119,20 +135,36 @@ export default function TodoApp2() {
       </div>
       <ul className="divide-y divide-gray-200 px-4">
         {listTodoApp?.map((item, index) => (
-          <li key={index} className="py-4">
+          <li key={index} className="py-4 flex items-center justify-between">
             <div className="flex items-center">
               <input
-                id="todo1"
+                id={`todo${index}`}
                 name="todo1"
                 type="checkbox"
                 className="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded"
               />
-              <label htmlFor="todo1" className="ml-3 block text-gray-900">
+              <label
+                htmlFor={`todo${index}`}
+                className="ml-3 block text-gray-900"
+              >
                 <span className="text-lg font-medium mr-2">{item?.data}</span>
                 <span className="text-sm font-light text-gray-500">
                   Due on {dayjs(item?.date).format("DD/MM/YYYY")}
                 </span>
               </label>
+            </div>
+            <div className="flex gap-2">
+              <FontAwesomeIcon icon={faPenToSquare} />
+              <ModelHeadlessUI
+                title={<FontAwesomeIcon icon={faTrash} />}
+                description={
+                  "Your payment has been successfully submitted. We’ve sent you an email with all of the details of your order."
+                }
+                className={"bg-slate-400 p-2 rounded-lg hover:bg-slate-500"}
+              />
+              <button onClick={() => handleDeleteTodoApp(item.Id)}>
+                <FontAwesomeIcon icon={faTrash} />
+              </button>
             </div>
           </li>
         ))}
