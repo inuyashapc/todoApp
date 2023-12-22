@@ -139,7 +139,6 @@ export default function TodoApp2() {
             placeholder="Add a task"
             {...register("todoApp", { required: true })}
           />
-          {errors.todoApp && <span>This field is required</span>}
 
           <button
             type="submit"
@@ -148,6 +147,9 @@ export default function TodoApp2() {
             Add
           </button>
         </div>
+        {errors.todoApp && (
+          <span className="text-red-500">This field is required</span>
+        )}
       </form>
       <div>
         {/* <button className="bg-green-500 p-2 rounded-xl">
@@ -159,12 +161,14 @@ export default function TodoApp2() {
           fileName={fileName}
           className={"bg-green-500 p-2 rounded-xl"}
         /> */}
-        <ExportToExcel
-          apiData={data2}
-          fileName={fileName2}
-          className={"bg-green-500 p-2 rounded-xl"}
-        />
-        <ImportFromExcel />
+        <div className="flex gap-2">
+          <ExportToExcel
+            apiData={data2}
+            fileName={fileName2}
+            className={"bg-green-500 p-2 rounded-xl flex gap-2 items-center"}
+          />
+          <ImportFromExcel />
+        </div>
       </div>
       <ul className="divide-y divide-gray-200 px-4">
         {listTodoApp?.map((item, index) => (

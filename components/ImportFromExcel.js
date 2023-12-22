@@ -1,3 +1,5 @@
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { read, utils } from "xlsx";
@@ -30,31 +32,28 @@ export default function ImportFromExcel() {
   };
   return (
     <>
-      <div className="row mb-2 mt-5">
-        <div className="col-sm-6 offset-3">
-          <div className="row">
-            <div className="col-md-6">
-              <div className="input-group">
-                <div className="custom-file">
-                  <input
-                    type="file"
-                    name="file"
-                    className="custom-file-input"
-                    id="inputGroupFile"
-                    required
-                    onChange={handleImport}
-                    accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                  />
-                  <label className="custom-file-label" htmlFor="inputGroupFile">
-                    Choose file
-                  </label>
-                </div>
-              </div>
-            </div>
+      <div>
+        <input
+          type="file"
+          name="file"
+          className="custom-file-input"
+          id="inputGroupFile"
+          required
+          onChange={handleImport}
+          accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+        />
+        <label
+          className="custom-file-label"
+          style={{ cursor: "pointer" }}
+          htmlFor="inputGroupFile"
+        >
+          <div className="flex gap-2 bg-green-500 p-2 items-center rounded-xl">
+            <FontAwesomeIcon icon={faUpload} />
+            Import data by excel
           </div>
-        </div>
+        </label>
       </div>
-      <div className="row">
+      {/* <div className="row">
         <div className="col-sm-6 offset-3">
           <table className="table">
             <thead>
@@ -83,7 +82,7 @@ export default function ImportFromExcel() {
             </tbody>
           </table>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }

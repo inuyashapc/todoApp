@@ -1,6 +1,8 @@
 import React from "react";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDownload } from "@fortawesome/free-solid-svg-icons";
 
 export const ExportToExcel = ({ apiData, fileName, className }) => {
   const fileType =
@@ -20,7 +22,8 @@ export const ExportToExcel = ({ apiData, fileName, className }) => {
       className={className}
       onClick={(e) => exportToCSV(apiData, fileName)}
     >
-      Export
+      <FontAwesomeIcon icon={faDownload} />
+      Export excel
     </button>
   );
 };
